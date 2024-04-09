@@ -134,7 +134,7 @@ export const getPagingUser = async (req, res) => {
         const users = await User.find().skip(query.pageSize * query.pageIndex - query.pageSize).limit(query.pageSize)
         const countUsers = await User.countDocuments()
         const totalPage = Math.ceil(countUsers / query.pageSize) //! Math.ceil -> lấy giá trị trần tức: 0.2 = 1, 1.2 = 2...
-        return res.status(200).json({users, totalPage})
+        return res.status(200).json({users, totalPage, count: countUsers})
     } catch (error) {
         return res.status(500).json(error)
     }
