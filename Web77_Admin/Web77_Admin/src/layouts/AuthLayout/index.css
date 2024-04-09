@@ -1,0 +1,10 @@
+.authlayout {
+    background-color: #282727;
+    font-family: "Quicksand", sans-serif;
+}
+
+.main {
+    background-color: white;
+    border-radius: 10px;
+    padding: 5px 15px;
+}
