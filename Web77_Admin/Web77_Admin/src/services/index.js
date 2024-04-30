@@ -1,6 +1,10 @@
 import axios from "axios";
 import { API_URL } from "../config";
-import { getTokenFromLocalStorage } from "../utils/localstorage";
+import {
+  getTokenFromLocalStorage,
+  removeTokenFromLocalStorage,
+  removeUserFromLocalStorage,
+} from "../utils/localstorage";
 
 //! API with no token
 const axiosInstance = axios.create({
@@ -17,5 +21,20 @@ axiosInstanceAuth.interceptors.request.use((config) => {
   return config;
 });
 export { axiosInstance, axiosInstanceAuth };
+
+  
+//! Cho user sign out khi token hết hạn ( set token time )
+axiosInstanceAuth.interceptors.response.use(
+  (res) => {
+    return res
+  },
+  (error) => {
+    if (error.response.status == 401) {
+      removeTokenFromLocalStorage();
+      removeUserFromLocalStorage();
+      window.location.href = "/login";
+    }
+  }
+);
 
 //! Ta có thể tạo nhiều instances ( attributes )

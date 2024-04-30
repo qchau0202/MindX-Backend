@@ -1,4 +1,6 @@
 import { Modal, Input, Form, Button, Select } from "antd";
+import { getUserById } from "../../../../services/user";
+import { useEffect } from "react";
 const ModalCreateUser = ({
   loading,
   isModalOpen,
@@ -6,7 +8,22 @@ const ModalCreateUser = ({
   handleOk,
   title,
   form,
+  selectedUser,
 }) => {
+  const getUser = async () => {
+    try {
+      const result = await getUserById(selectedUser);
+      form.setFieldValue("name", result.data.user.name);
+      form.setFieldValue("email", result.data.user.email);
+      form.setFieldValue("role", result.data.user.role);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    if (selectedUser) getUser();
+  }, [selectedUser]);
   return (
     <>
       <Modal
@@ -43,45 +60,51 @@ const ModalCreateUser = ({
             <Input />
           </Form.Item>
 
-          <Form.Item
-            label="Password"
-            name="password"
-            rules={[
-              {
-                required: true,
-                message: "Please input your password!",
-              },
-              {
-                min: 6,
-                message: "Password must be at least 6 characters!",
-              },
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
-
-          <Form.Item
-            label="Confirm password"
-            name="confirm-password"
-            dependencies={["password"]}
-            rules={[
-              {
-                required: true,
-              },
-              ({ getFieldValue }) => ({
-                validator(_, value) {
-                  if (!value || getFieldValue("password") === value) {
-                    return Promise.resolve();
-                  }
-                  return Promise.reject(
-                    new Error("The new password that you entered do not match!")
-                  );
+          {!selectedUser && (
+            <Form.Item
+              label="Password"
+              name="password"
+              rules={[
+                {
+                  required: true,
+                  message: "Please input your password!",
                 },
-              }),
-            ]}
-          >
-            <Input.Password />
-          </Form.Item>
+                {
+                  min: 6,
+                  message: "Password must be at least 6 characters!",
+                },
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          )}
+
+          {!selectedUser && (
+            <Form.Item
+              label="Confirm password"
+              name="confirm-password"
+              dependencies={["password"]}
+              rules={[
+                {
+                  required: true,
+                },
+                ({ getFieldValue }) => ({
+                  validator(_, value) {
+                    if (!value || getFieldValue("password") === value) {
+                      return Promise.resolve();
+                    }
+                    return Promise.reject(
+                      new Error(
+                        "The new password that you entered do not match!"
+                      )
+                    );
+                  },
+                }),
+              ]}
+            >
+              <Input.Password />
+            </Form.Item>
+          )}
 
           <Form.Item
             label="Role"

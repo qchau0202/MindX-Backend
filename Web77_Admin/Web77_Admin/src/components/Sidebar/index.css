@@ -1,6 +1,9 @@
 .side-bar {
     border-radius: 10px;
 }
+.user {
+    width: 25%;
+}
 .user img {
     height: 55px;
     width: 58px;

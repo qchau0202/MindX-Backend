@@ -16,4 +16,29 @@ const getPagingUser = ({ pageSize, pageIndex }) => {
 const createUser = (data) => {
   return axiosInstanceAuth.post(`/user/create-user`, data)
 }
-export { login, signUp, getPagingUser, createUser };
+
+const getUserById = (userId) => {
+  return axiosInstanceAuth.get(`/user/${userId}`)
+}
+
+const editUser = (userId, data) => {
+  return axiosInstanceAuth.put(`/user/${userId}`, data)
+} 
+
+const deleteUser = (userId) => {
+  return axiosInstanceAuth.delete(`/user/${userId}`)
+}
+
+const uploadAvatar = (formData) => {
+  return axiosInstanceAuth.put('/user/upload-avatar', formData)
+}
+export {
+  login,
+  signUp,
+  getPagingUser,
+  createUser,
+  getUserById,
+  editUser,
+  deleteUser,
+  uploadAvatar,
+};
